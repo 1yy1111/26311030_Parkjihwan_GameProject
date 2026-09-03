@@ -14,14 +14,16 @@ int SceneGameBegin::Destroy()
 
 int SceneGameBegin::Update()
 {
-	if (g2_GetMouseEvent(1))
-	{
-		// Right Button
-	}
-
 	mouseX = g2_GetMouseX();
 	mouseY = g2_GetMouseY();
 	mouseZ = g2_GetMouseZ();
+
+
+	if (g2_GetMouseEvent(0))
+	{
+		m_imagePos = VEC2(mouseX-250, mouseY-20);
+	}
+
 
 	// 윈도우 타이틀 영역에 마우스 위치 출력
 	g2_SetWindowTitle("%d %d %d", mouseX, mouseY, mouseZ);
@@ -31,10 +33,8 @@ int SceneGameBegin::Update()
 
 int SceneGameBegin::Render()
 {
-	VEC2	vcPos(mouseX, mouseY);
 
-
-	g2_Draw2D(m_tx, {}, &vcPos);
+	g2_Draw2D(m_tx, {}, &m_imagePos);
 	return 0;
 }
 

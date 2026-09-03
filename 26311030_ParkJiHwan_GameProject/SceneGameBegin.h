@@ -1,4 +1,6 @@
 #pragma once
+#include "glc2d.h"
+
 class SceneGameBegin
 {
 public:
@@ -14,5 +16,7 @@ protected:
 	int mouseX = 0;
 	int mouseY = 0;
 	int mouseZ = 0;
+
+	VEC2 m_imagePos{ 100, 100 };
 };
 
