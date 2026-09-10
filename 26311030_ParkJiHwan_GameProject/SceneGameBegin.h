@@ -26,6 +26,9 @@ protected:
 	int mouseZ = 0;
 
 	VEC2 m_imagePos	{ 670, 600 };
-	VEC2 m_imagePoss{ 100, 100 };
+	VEC2 m_imagePoss{ 550, 600 };
+	VEC2 m_titlePos{ 500, 450 };
+
+
 };
 

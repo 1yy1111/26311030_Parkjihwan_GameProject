@@ -29,8 +29,8 @@ int SceneGameBegin::Update()
 
 	if (g2_GetMouseEvent(0))
 	{
-		//m_imagePos = VEC2(mouseX, mouseY);
-		m_imagePoss = VEC2(mouseX-23, mouseY-23);
+		m_imagePos = VEC2(mouseX, mouseY);
+		m_imagePoss = VEC2(mouseX-120, mouseY);
 	}
 
 
@@ -53,17 +53,16 @@ int SceneGameBegin::Render()
 
 	// title
 	{
-
+		g2_Draw2D(m_txTitle, nullptr, &m_titlePos);
 	}
 
 	// ¸Þ´º
 	{
-		VEC2 m_titlePos{ 500, 450 };
 
 
-		g2_Draw2D(m_tx, nullptr, &m_imagePos);		// 650.600
+
+		g2_Draw2D(m_tx, nullptr, &m_imagePos);		
 		g2_Draw2D(m_txCar, nullptr, &m_imagePoss);
-		g2_Draw2D(m_txTitle, nullptr, &m_titlePos); 
 	}
 	
 
