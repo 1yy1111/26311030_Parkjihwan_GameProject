@@ -5,13 +5,13 @@
 
 int SceneGameBegin::Init()
 { 
-	this->m_txBg = g2_TextureLoad("resource/background.png");
-	this->m_tx = g2_TextureLoad("resource/test_car.png");
-	this->m_txCar = g2_TextureLoad("resource/test_car_e.png");
+	this->m_txBg = g2_TextureLoad("resource/Resource/background.png", 0);
+	this->m_tx = g2_TextureLoad("resource/Resource/sport_red.png");
+	this->m_txCar = g2_TextureLoad("resource/Resource/sport_yellow.png");
 	
-	this->m_txTitle = g2_TextureLoad("resource/start.png");
+	this->m_txTitle = g2_TextureLoad("resource/Resource/start.png");
 
-	this->m_fntMessage = g2_FontCreate("Bahnschrift", 32);
+	//this->m_fntMessage = g2_FontCreate("Bahnschrift", 32);
 	return 0;
 }
 
@@ -53,7 +53,7 @@ int SceneGameBegin::Render()
 
 	// title
 	{
-		g2_Draw2D(m_txTitle, nullptr, &m_titlePos);
+		//g2_Draw2D(m_txTitle, nullptr, &m_titlePos);
 	}
 
 	// 메뉴
@@ -68,8 +68,8 @@ int SceneGameBegin::Render()
 
 	// 폰트
 	{
-		RECT rc{ 400, 400, 840, 600 };
-		g2_FontDrawText(m_fntMessage, rc, 0xFFFF00FF, "enter를 눌러 시작");
+	/*	RECT rc{ 400, 400, 840, 600 };
+		g2_FontDrawText(m_fntMessage, rc, 0xFFFF00FF, "enter를 눌러 시작");*/
 	}
 	return 0;
 }
