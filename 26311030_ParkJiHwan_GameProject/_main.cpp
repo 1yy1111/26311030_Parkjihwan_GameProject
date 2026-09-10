@@ -3,8 +3,6 @@
 #include <stdio.h>
 #include "CApplication.h"
 
-CApplication g_app;
-
 
 int main()
 {

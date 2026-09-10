@@ -11,13 +11,16 @@ public:
 	int Render();
 	int Destroy();
 
+public:
+	SIZE GetWinSize();
+
 protected:
 	int InitSdk();
 
 protected:
 	// windows
-	POINT m_winPos{ 100, 100 };
-	SIZE m_sinSize{ 800, 600 };
+	POINT m_winPos{ 0, 0 };
+	SIZE m_winSize{ 1280, 720 };
 	
 	std::string m_winName = "Game Name";
 
@@ -26,3 +29,5 @@ protected:
 	
 };
 
+// 전역 접근
+extern CApplication g_app;
