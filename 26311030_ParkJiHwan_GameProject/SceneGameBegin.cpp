@@ -5,13 +5,13 @@
 
 int SceneGameBegin::Init()
 { 
-	this->m_txBg = g2_TextureLoad("resource/Resource/background.png", 0);
-	this->m_tx = g2_TextureLoad("resource/Resource/sport_red.png");
-	this->m_txCar = g2_TextureLoad("resource/Resource/sport_yellow.png");
+	this->m_txBg = g2_TextureLoad("Resource/Texture/background.png", 0);
+	this->m_txOpponent = g2_TextureLoad("Resource/Texture/sport_red.png");
+	this->m_txPlayer = g2_TextureLoad("Resource/Texture/sport_yellow.png");
 	
-	this->m_txTitle = g2_TextureLoad("resource/Resource/start.png");
+	this->m_txTitle = g2_TextureLoad("Resource/Texture/Title.png");
 
-	//this->m_fntMessage = g2_FontCreate("Bahnschrift", 32);
+	this->m_fntMessage = g2_FontCreate("Neo둥근모", 32);
 	return 0;
 }
 
@@ -22,20 +22,7 @@ int SceneGameBegin::Destroy()
 
 int SceneGameBegin::Update()
 {
-	mouseX = g2_GetMouseX();
-	mouseY = g2_GetMouseY();
-	mouseZ = g2_GetMouseZ();
 
-
-	if (g2_GetMouseEvent(0))
-	{
-		m_imagePos = VEC2(mouseX, mouseY);
-		m_imagePoss = VEC2(mouseX-120, mouseY);
-	}
-
-
-	// 윈도우 타이틀 영역에 마우스 위치 출력
-	g2_SetWindowTitle("%d %d %d", mouseX, mouseY, mouseZ);
 
 	return 0;
 }
@@ -53,23 +40,21 @@ int SceneGameBegin::Render()
 
 	// title
 	{
-		//g2_Draw2D(m_txTitle, nullptr, &m_titlePos);
+		g2_Draw2D(m_txTitle, nullptr, &m_titlePos);
 	}
 
 	// 메뉴
 	{
-
-
-
-		g2_Draw2D(m_tx, nullptr, &m_imagePos);		
-		g2_Draw2D(m_txCar, nullptr, &m_imagePoss);
+		
+		g2_Draw2D(m_txPlayer, nullptr, &m_playerPos);
+		g2_Draw2D(m_txOpponent, nullptr, &m_opponentPos);
 	}
 	
 
 	// 폰트
 	{
-	/*	RECT rc{ 400, 400, 840, 600 };
-		g2_FontDrawText(m_fntMessage, rc, 0xFFFF00FF, "enter를 눌러 시작");*/
+		RECT rc{ 475, 430, 975, 490 };
+		g2_FontDrawText(m_fntMessage, rc, 0xFF17243A, "Enter 키를 눌러 시작");
 	}
 	return 0;
 }
