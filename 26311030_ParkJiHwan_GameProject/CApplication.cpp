@@ -1,7 +1,5 @@
 #include "CApplication.h"
-#include "SceneGameBegin.h"
 #include "glc2d.h"
-#include <stdio.h>
 
 CApplication g_app;
 
@@ -21,28 +19,52 @@ int CApplication::Init()
     InitSdk();
 
     m_sceneBegin.Init();
+    m_scenePlay.Init();
+    m_sceneResult.Init();
+
     return 0;
 }
 
 int CApplication::Update()
 {
-    //printf("Update");
+    if (Scene::Begin == m_currentScene)
+    {
+        m_sceneBegin.Update();
+    }
+    else if (Scene::Play == m_currentScene)
+    {
+        m_scenePlay.Update();
+    }
+    else if (Scene::Result == m_currentScene)
+    {
+        m_sceneResult.Update();
+    }
 
-    m_sceneBegin.Update();
     return 0;
 }
 
 int CApplication::Render()
 {
-    //printf("Render");
+    // 공통 배경, 차
+    m_scenePlay.Render();
 
-    m_sceneBegin.Render();
+    
+    if (Scene::Begin == m_currentScene)
+    {
+        m_sceneBegin.Render();
+    }
+    else if (Scene::Result == m_currentScene)
+    {
+        m_sceneResult.Render();
+    }
 
     return 0;
 }
 
 int CApplication::Destroy()
 {
+    m_sceneResult.Destroy();
+    m_scenePlay.Destroy();
     m_sceneBegin.Destroy();
 
     // 윈도우 해제
@@ -56,11 +78,26 @@ SIZE CApplication::GetWinSize()
     return m_winSize;
 }
 
+void CApplication::ChangeScene(Scene scene)
+{
+    if (m_currentScene == scene)
+    {
+        return;
+    }
+
+    // Begin -> Play, Result -> Play일땐 새 게임 시작
+    if (Scene::Play == scene)
+    {
+        m_scenePlay.ResetGame();
+    }
+
+    m_currentScene = scene;
+}
+
 int CApplication::InitSdk()
 {
     // SDK 초기화
     g2_InitSdk();
-    //printf("Start  ...\n\n");
 
     g2_SetFrameMove(AppUpdate);
     g2_SetRender(AppRender);
