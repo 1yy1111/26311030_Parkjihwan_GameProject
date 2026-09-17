@@ -13,6 +13,11 @@ int SceneGamePlay::Init()
 		this->m_txPlayer = g2_TextureLoad("Resource/Texture/sport_yellow.png");
 	}
 
+	// sound
+	{
+		this->m_startSound = g2_SoundLoad("Resoure/Sound/game_start.mp3");
+	}
+
 	return 0;
 }
 
@@ -31,6 +36,15 @@ void SceneGamePlay::ResetGame()
 
 int SceneGamePlay::Update()
 {
+	long long currentTime = g2_TimeGetTime();
+	
+
+
+	m_playerPos.x += m_playerSpeed * deltaTime;
+	
+
+
+	g2_SoundPlay(m_startSound);
 
 	return 0;
 }
@@ -51,5 +65,6 @@ int SceneGamePlay::Render()
 		g2_Draw2D(m_txPlayer, nullptr, &m_playerPos);
 		g2_Draw2D(m_txOpponent, nullptr, &m_opponentPos);
 	}
+
 	return 0;
 }

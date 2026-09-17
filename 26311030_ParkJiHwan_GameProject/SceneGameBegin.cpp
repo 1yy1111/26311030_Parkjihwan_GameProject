@@ -38,6 +38,7 @@ int SceneGameBegin::Update()
 	if (pKey[VK_RETURN])
 	{
 		g_app.ChangeScene(Scene::Play);
+
 	}
 
 	return 0;
