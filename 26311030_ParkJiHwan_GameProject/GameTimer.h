@@ -1,27 +1,18 @@
 #pragma once
-#include <chrono>
+#include "glc2d.h"
 
 class GameTimer
 {
 public:
-	GameTimer();
+	int Init();
+	int Update();
 
-	void Reset();
-	void Tick();
-
+public:
 	float GetDeltaTime() const;
-	float GetTotalTime() const;
-
 
 private:
-	using Clock = std::chrono::high_resolution_clock;
-	using TimePoint = std::chrono::time_point<Clock>;
-
-private:
-	TimePoint m_baseTime;
-	TimePoint m_prevTime;
-	float m_deltaTime;
-	float m_totalTime;
+	long long	m_lastTime	{0};
+	float		m_deltaTime {0.0f};
 
 };
 

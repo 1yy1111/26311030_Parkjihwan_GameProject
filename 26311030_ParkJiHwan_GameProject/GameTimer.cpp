@@ -1,32 +1,25 @@
 #include "GameTimer.h"
 
-GameTimer::GameTimer()
+int GameTimer::Init()
 {
-    Reset();
+	m_lastTime = g2_TimeGetTime();
+	m_deltaTime = 0.0f;
+
+	return 0;
 }
 
-void GameTimer::Reset()
+
+int GameTimer::Update()
 {
-    auto now = Clock::now();
+	long long currentTime = g2_TimeGetTime();
 
-    m_baseTime = now;
-    m_prevTime = now;
-    m_deltaTime = 0.0f;
-    m_totalTime = 0.0f;
+	m_deltaTime = static_cast<float>(currentTime - m_lastTime) * 0.001f; 
+	m_lastTime = currentTime;
 
-}
-
-void GameTimer::Tick()
-{
-
+	return 0;
 }
 
 float GameTimer::GetDeltaTime() const
 {
-    return 0.0f;
-}
-
-float GameTimer::GetTotalTime() const
-{
-    return 0.0f;
+	return m_deltaTime;
 }
