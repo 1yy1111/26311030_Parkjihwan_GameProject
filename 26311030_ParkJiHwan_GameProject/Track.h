@@ -10,6 +10,12 @@ enum class TrackSection
 	RightCurve
 };
 
+enum class TrackLane
+{
+	Inner,
+	Outer
+};
+
 class Track
 {
 public:

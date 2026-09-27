@@ -20,41 +20,65 @@ void Player::Reset()
 	m_trackSection = TrackSection::BottomStraight;
 	m_curveAngle = 0.f;
 	m_rotationAngle = 0.f;
+	m_lane = TrackLane::Outer;
+	m_currentRadius = Track::OUTER_LANE_RADIUS;
+	m_wasMouseDown = (g2_GetMouseEvent(0) == 3);
 }
 
 int Player::Update(float deltaTime)
 {
+	bool isMouseDown = (g2_GetMouseEvent(0) == 3);
+
+	if (isMouseDown && !m_wasMouseDown)
+	{
+		if (m_lane == TrackLane::Outer)
+		{
+			m_lane = TrackLane::Inner;
+		}
+		else
+		{
+			m_lane = TrackLane::Outer;
+		}
+	}
+	m_wasMouseDown = isMouseDown;
+
+	m_currentRadius = (TrackLane::Outer == m_lane)
+		? Track::OUTER_LANE_RADIUS
+		: Track::INNER_LANE_RADIUS;
+
 	if (m_trackSection == TrackSection::BottomStraight)
 	{
 		m_position.x -= m_speed * deltaTime;
+		m_position.y = Track::CURVE_POS_Y + m_currentRadius;
 		m_rotationAngle = 0.f;
 	}
 	else if (m_trackSection == TrackSection::LeftCurve)
 	{
-		m_curveAngle -= (m_speed / Track::OUTER_LANE_RADIUS) * deltaTime;
+		m_curveAngle -= (m_speed / m_currentRadius) * deltaTime;
 
 		m_position.x = Track::LEFT_CURVE_POS_X
-			+ Track::OUTER_LANE_RADIUS * -std::cos(m_curveAngle);
+			+ m_currentRadius * -std::cos(m_curveAngle);
 
 		m_position.y = Track::CURVE_POS_Y 
-			+ Track::OUTER_LANE_RADIUS * std::sin(m_curveAngle);
+			+ m_currentRadius * std::sin(m_curveAngle);
 
 		m_rotationAngle = m_curveAngle - Track::PI / 2.0f;
 	}
 	else if (m_trackSection == TrackSection::TopStraight)
 	{
 		m_position.x += m_speed * deltaTime;
+		m_position.y = Track::CURVE_POS_Y - m_currentRadius;
 		m_rotationAngle = -Track::PI;
 	}
 	else if (m_trackSection == TrackSection::RightCurve)
 	{
-		m_curveAngle -= (m_speed / Track::OUTER_LANE_RADIUS) * deltaTime;
+		m_curveAngle -= (m_speed / m_currentRadius) * deltaTime;
 
 		m_position.x = Track::RIGHT_CURVE_POS_X
-			+ Track::OUTER_LANE_RADIUS * -std::cos(m_curveAngle);
+			+ m_currentRadius * -std::cos(m_curveAngle);
 
 		m_position.y = Track::CURVE_POS_Y
-			+ Track::OUTER_LANE_RADIUS * std::sin(m_curveAngle);
+			+ m_currentRadius * std::sin(m_curveAngle);
 
 		m_rotationAngle = m_curveAngle - Track::PI / 2.0f;
 	}
@@ -99,6 +123,7 @@ void Player::CheckPlayerTrackSection()
 		if (m_curveAngle <= -Track::PI / 2.0f)
 		{
 			m_position.x = Track::LEFT_CURVE_POS_X;
+			m_position.y = Track::CURVE_POS_Y - m_currentRadius;
 			m_curveAngle = -Track::PI / 2.0f;
 			m_trackSection = TrackSection::TopStraight;
 			m_rotationAngle = -Track::PI;
@@ -118,6 +143,7 @@ void Player::CheckPlayerTrackSection()
 		if (m_curveAngle <= -3.0f * Track::PI / 2.0f)
 		{
 			m_position.x = Track::RIGHT_CURVE_POS_X;
+			m_position.y = Track::CURVE_POS_Y + m_currentRadius;
 			m_curveAngle = -3.0f * Track::PI / 2.0f;
 			m_trackSection = TrackSection::BottomStraight;
 			m_rotationAngle = 0.0f;
