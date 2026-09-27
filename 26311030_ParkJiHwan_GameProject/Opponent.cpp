@@ -14,11 +14,42 @@ int Opponent::Destroy()
 
 int Opponent::Update(float deltaTime)
 {
-	if (m_trackSection == TrackSection::BottomStraight)
+	if (TrackSection::BottomStraight == m_trackSection)
 	{
 		m_position.x += m_speed * deltaTime;
-		CheckOpponentTrackSection();
+		m_rotationAngle = 0.f;
 	}
+	else if (TrackSection::RightCurve == m_trackSection)
+	{
+		m_curveAngle -= (m_speed / Track::OUTER_LANE_RADIUS) * deltaTime;
+
+		m_position.x = Track::RIGHT_CURVE_POS_X
+			+ Track::OUTER_LANE_RADIUS * std::cos(m_curveAngle);
+
+		m_position.y = Track::CURVE_POS_Y
+			+ Track::OUTER_LANE_RADIUS * std::sin(m_curveAngle);
+
+		m_rotationAngle = m_curveAngle - Track::PI / 2.0f;
+	}
+	else if (TrackSection::TopStraight == m_trackSection)
+	{
+		m_position.x -= m_speed * deltaTime;
+		m_rotationAngle = -Track::PI;
+	}
+	else if (TrackSection::LeftCurve == m_trackSection)
+	{
+		m_curveAngle -= (m_speed / Track::OUTER_LANE_RADIUS) * deltaTime;
+
+		m_position.x = Track::LEFT_CURVE_POS_X
+			+ Track::OUTER_LANE_RADIUS * std::cos(m_curveAngle);
+
+		m_position.y = Track::CURVE_POS_Y
+			+ Track::OUTER_LANE_RADIUS * std::sin(m_curveAngle);
+
+		m_rotationAngle = m_curveAngle - Track::PI / 2.0f;
+	}
+
+	CheckOpponentTrackSection();
 	return 0;
 }
 
@@ -29,7 +60,12 @@ int Opponent::Render()
 		m_position.x - g2_TextureWidth(m_txOpponent) * 0.5f,
 		m_position.y - g2_TextureHeight(m_txOpponent) * 0.5f
 	};
-	g2_Draw2D(m_txOpponent, nullptr, &opponentDrawPos);
+
+	g2_Draw2D(
+		m_txOpponent, nullptr, &opponentDrawPos,
+		nullptr, &m_position, -m_rotationAngle
+	);
+
 	return 0;
 }
 
@@ -43,16 +79,48 @@ void Opponent::Reset()
 	m_position = VEC2(695.5f, Track::OUTER_BOTTOM_Y);
 	m_speed = 500.f;
 	m_trackSection = TrackSection::BottomStraight;
+	m_curveAngle = 0.f;
+	m_rotationAngle = 0.f;
 }
 
 void Opponent::CheckOpponentTrackSection()
 {
-	if (m_trackSection == TrackSection::BottomStraight)
+	if (TrackSection::BottomStraight == m_trackSection)
 	{
 		if (m_position.x >= Track::RIGHT_CURVE_POS_X)
 		{
 			m_position.x = Track::RIGHT_CURVE_POS_X;
 			m_trackSection = TrackSection::RightCurve;
+			m_curveAngle = Track::PI / 2.f;
+		}
+	}
+	else if (TrackSection::RightCurve == m_trackSection)
+	{
+		if (m_curveAngle <= -Track::PI / 2.f)
+		{
+			m_position.x = Track::RIGHT_CURVE_POS_X;
+			m_curveAngle = -Track::PI / 2.f;
+			m_trackSection = TrackSection::TopStraight;
+			m_rotationAngle = -Track::PI;
+		}
+	}
+	else if (TrackSection::TopStraight == m_trackSection)
+	{
+		if (m_position.x <= Track::LEFT_CURVE_POS_X)
+		{
+			m_position.x = Track::LEFT_CURVE_POS_X;
+			m_trackSection = TrackSection::LeftCurve;
+			m_curveAngle = -Track::PI / 2.f;
+		}
+	}
+	else if (TrackSection::LeftCurve == m_trackSection)
+	{
+		if (m_curveAngle <= -3.f * Track::PI / 2.f)
+		{
+			m_position.x = Track::LEFT_CURVE_POS_X;
+			m_curveAngle = -3.f * Track::PI / 2.f;
+			m_trackSection = TrackSection::BottomStraight;
+			m_rotationAngle = 0.0f;
 		}
 	}
 }

@@ -40,5 +40,8 @@ public:
 	{
 		CURVE_POS_Y + OUTER_LANE_RADIUS
 	};
+
+	
+	static constexpr float PI{ 3.14159265358979323846f };
 };
 
