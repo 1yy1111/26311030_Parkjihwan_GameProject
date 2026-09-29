@@ -1,8 +1,5 @@
 #include "SceneGamePlay.h"
 #include "CApplication.h"
-#include "glc2d.h"
-#include <windows.h>
-
 
 int SceneGamePlay::Init()
 {
@@ -38,6 +35,20 @@ void SceneGamePlay::ResetGame()
 	g2_SoundPlay(m_startSound);
 }
 
+bool SceneGamePlay::CheckCollision(VEC2 playerPos, VEC2 opponentPos)
+{
+	constexpr float PLAYER_COLLISION_RADIUS		{ 22.0f };
+	constexpr float OPPONENT_COLLISION_RADIUS	{ 22.0f };
+
+	float dx = playerPos.x - opponentPos.x;
+	float dy = playerPos.y - opponentPos.y;
+	float collisionDistance =
+		PLAYER_COLLISION_RADIUS + OPPONENT_COLLISION_RADIUS;
+
+	return dx * dx + dy * dy
+		<= collisionDistance * collisionDistance;
+}
+
 int SceneGamePlay::Update()
 {
 	m_gameTimer.Update();
@@ -45,7 +56,14 @@ int SceneGamePlay::Update()
 	m_player.Update(deltaTime);
 	m_opponent.Update(deltaTime);
 
+	VEC2 playerPos = m_player.GetPosition();
+	VEC2 opponentPos = m_opponent.GetPosition();
 
+	bool isCollision = CheckCollision(playerPos, opponentPos);
+	if(isCollision)
+	{
+		g_app.ChangeScene(Scene::Result);
+	}
 
 	return 0;
 }
@@ -65,3 +83,4 @@ int SceneGamePlay::Render()
 	m_opponent.Render();
 	return 0;
 }
+

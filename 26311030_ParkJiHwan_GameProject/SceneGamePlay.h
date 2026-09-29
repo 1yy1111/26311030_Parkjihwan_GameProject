@@ -1,9 +1,11 @@
 #pragma once
 #include "glc2d.h"
+#include <windows.h>
 #include "GameTimer.h"
 #include "Track.h"
 #include "Player.h"
 #include "Opponent.h"
+
 
 class SceneGamePlay
 {
@@ -17,6 +19,8 @@ public:
 	void ResetGame();
 
 protected:
+	bool CheckCollision(VEC2 playerPos, VEC2 opponentPos);
+
 	// game texture
 	int m_txBg				{ -1 };
 
@@ -25,6 +29,8 @@ protected:
 
 	// game sound 
 	int m_startSound		{ -1 };
+
+	int m_gameScore			{ 0 };	
 
 
 	GameTimer m_gameTimer;

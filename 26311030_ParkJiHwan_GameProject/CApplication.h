@@ -34,7 +34,7 @@ protected:
 	// windows
 	POINT m_winPos{ 0, 0 };
 	SIZE m_winSize{ 1280, 720 };
-	std::string m_winName = "Game Name";
+	std::string m_winName = "Crash Out";
 
 	// scene
 	Scene m_currentScene{ Scene::Begin };
