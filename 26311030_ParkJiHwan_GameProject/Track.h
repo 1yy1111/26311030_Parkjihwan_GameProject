@@ -20,13 +20,13 @@ class Track
 {
 public:
 	// curve position
-	static constexpr float LEFT_CURVE_POS_X{ 334.0f };
-	static constexpr float RIGHT_CURVE_POS_X{ 946.0f };
-	static constexpr float CURVE_POS_Y{ 358.0f };
+	static constexpr float LEFT_CURVE_POS_X		{ 334.0f };
+	static constexpr float RIGHT_CURVE_POS_X	{ 946.0f };
+	static constexpr float CURVE_POS_Y			{ 358.0f };
 
 	// lane radii
-	static constexpr float INNER_LANE_RADIUS{ 204.0f };
-	static constexpr float OUTER_LANE_RADIUS{ 252.0f };
+	static constexpr float INNER_LANE_RADIUS	{ 204.0f };
+	static constexpr float OUTER_LANE_RADIUS	{ 252.0f };
 
 	// straight lane positions
 	static constexpr float INNER_TOP_Y

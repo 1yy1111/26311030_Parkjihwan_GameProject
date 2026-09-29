@@ -14,39 +14,82 @@ int Opponent::Destroy()
 
 int Opponent::Update(float deltaTime)
 {
+	float targetRadius = (TrackLane::Outer == m_lane)
+		? Track::OUTER_LANE_RADIUS
+		: Track::INNER_LANE_RADIUS;
+
+	float changeAmount = m_lineChangeSpeed * deltaTime;
+
+	if (m_currentRadius < targetRadius)
+	{
+		m_currentRadius += changeAmount;
+
+		if (m_currentRadius > targetRadius)
+		{
+			m_currentRadius = targetRadius;
+		}
+	}
+	else if (m_currentRadius > targetRadius)
+	{
+		m_currentRadius -= changeAmount;
+		if (m_currentRadius < targetRadius)
+		{
+			m_currentRadius = targetRadius;
+		}
+	}
+
 	if (TrackSection::BottomStraight == m_trackSection)
 	{
 		m_position.x += m_speed * deltaTime;
+		m_position.y = Track::CURVE_POS_Y + m_currentRadius;
 		m_rotationAngle = 0.f;
 	}
 	else if (TrackSection::RightCurve == m_trackSection)
 	{
-		m_curveAngle -= (m_speed / Track::OUTER_LANE_RADIUS) * deltaTime;
+		m_curveAngle -= (m_speed / m_currentRadius) * deltaTime;
 
 		m_position.x = Track::RIGHT_CURVE_POS_X
-			+ Track::OUTER_LANE_RADIUS * std::cos(m_curveAngle);
+			+ m_currentRadius * std::cos(m_curveAngle);
 
 		m_position.y = Track::CURVE_POS_Y
-			+ Track::OUTER_LANE_RADIUS * std::sin(m_curveAngle);
+			+ m_currentRadius * std::sin(m_curveAngle);
 
 		m_rotationAngle = m_curveAngle - Track::PI / 2.0f;
 	}
 	else if (TrackSection::TopStraight == m_trackSection)
 	{
 		m_position.x -= m_speed * deltaTime;
+		m_position.y = Track::CURVE_POS_Y - m_currentRadius;
 		m_rotationAngle = -Track::PI;
 	}
 	else if (TrackSection::LeftCurve == m_trackSection)
 	{
-		m_curveAngle -= (m_speed / Track::OUTER_LANE_RADIUS) * deltaTime;
+		m_curveAngle -= (m_speed / m_currentRadius) * deltaTime;
 
 		m_position.x = Track::LEFT_CURVE_POS_X
-			+ Track::OUTER_LANE_RADIUS * std::cos(m_curveAngle);
+			+ m_currentRadius * std::cos(m_curveAngle);
 
 		m_position.y = Track::CURVE_POS_Y
-			+ Track::OUTER_LANE_RADIUS * std::sin(m_curveAngle);
+			+ m_currentRadius * std::sin(m_curveAngle);
 
 		m_rotationAngle = m_curveAngle - Track::PI / 2.0f;
+	}
+
+	bool isCurve =
+		m_trackSection == TrackSection::RightCurve ||
+		m_trackSection == TrackSection::LeftCurve;
+
+	if (isCurve &&
+		!m_laneDecisionDone &&
+		m_curveAngle <= m_laneDecisionAngle)
+	{
+		int result = m_laneDistribution(m_randomEngine);
+
+		m_lane = (result == 1)
+			? TrackLane::Inner
+			: TrackLane::Outer;
+
+		m_laneDecisionDone = true;
 	}
 
 	CheckOpponentTrackSection();
@@ -81,6 +124,10 @@ void Opponent::Reset()
 	m_trackSection = TrackSection::BottomStraight;
 	m_curveAngle = 0.f;
 	m_rotationAngle = 0.f;
+	m_lane = TrackLane::Outer;
+	m_currentRadius = Track::OUTER_LANE_RADIUS;
+	m_laneDecisionDone = true;
+	m_laneDecisionAngle = 0.f;
 }
 
 void Opponent::CheckOpponentTrackSection()
@@ -92,6 +139,11 @@ void Opponent::CheckOpponentTrackSection()
 			m_position.x = Track::RIGHT_CURVE_POS_X;
 			m_trackSection = TrackSection::RightCurve;
 			m_curveAngle = Track::PI / 2.f;
+
+			m_laneDecisionAngle =
+				m_curveAngle - m_decisionOffset(m_randomEngine);
+
+			m_laneDecisionDone = false;
 		}
 	}
 	else if (TrackSection::RightCurve == m_trackSection)
@@ -99,6 +151,7 @@ void Opponent::CheckOpponentTrackSection()
 		if (m_curveAngle <= -Track::PI / 2.f)
 		{
 			m_position.x = Track::RIGHT_CURVE_POS_X;
+			m_position.y = Track::CURVE_POS_Y - m_currentRadius;
 			m_curveAngle = -Track::PI / 2.f;
 			m_trackSection = TrackSection::TopStraight;
 			m_rotationAngle = -Track::PI;
@@ -111,6 +164,11 @@ void Opponent::CheckOpponentTrackSection()
 			m_position.x = Track::LEFT_CURVE_POS_X;
 			m_trackSection = TrackSection::LeftCurve;
 			m_curveAngle = -Track::PI / 2.f;
+
+			m_laneDecisionAngle =
+				m_curveAngle - m_decisionOffset(m_randomEngine);
+
+			m_laneDecisionDone = false;
 		}
 	}
 	else if (TrackSection::LeftCurve == m_trackSection)
@@ -118,6 +176,7 @@ void Opponent::CheckOpponentTrackSection()
 		if (m_curveAngle <= -3.f * Track::PI / 2.f)
 		{
 			m_position.x = Track::LEFT_CURVE_POS_X;
+			m_position.y = Track::CURVE_POS_Y + m_currentRadius;
 			m_curveAngle = -3.f * Track::PI / 2.f;
 			m_trackSection = TrackSection::BottomStraight;
 			m_rotationAngle = 0.0f;

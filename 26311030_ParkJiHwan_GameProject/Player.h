@@ -16,17 +16,17 @@ public:
     VEC2 GetPosition() const;
 
 private:
-    int m_txPlayer{ -1 };
+    int m_txPlayer          { -1 };
 
     void CheckPlayerTrackSection();
 
-    VEC2 m_position{ 585.5f, Track::OUTER_BOTTOM_Y };
-    float m_speed{ 500.0f };
-    float m_curveAngle{ 0.0f };
-    float m_rotationAngle{ 0.0f };
+    VEC2 m_position         { 585.5f, Track::OUTER_BOTTOM_Y };
+    float m_speed           { 500.0f };
+    float m_curveAngle      { 0.0f };
+    float m_rotationAngle   { 0.0f };
 
-	float m_currentRadius{ Track::OUTER_LANE_RADIUS };
-    bool m_wasMouseDown{ false };
+	float m_currentRadius   { Track::OUTER_LANE_RADIUS };
+    bool m_wasMouseDown     { false };
 
     TrackSection m_trackSection
     {

@@ -31,7 +31,7 @@ int Player::Update(float deltaTime)
 
 	if (isMouseDown && !m_wasMouseDown)
 	{
-		if (m_lane == TrackLane::Outer)
+		if (TrackLane::Outer == m_lane)
 		{
 			m_lane = TrackLane::Inner;
 		}
