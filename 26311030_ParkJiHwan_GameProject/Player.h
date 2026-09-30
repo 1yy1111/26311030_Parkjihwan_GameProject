@@ -14,6 +14,8 @@ public:
 public:
     void Reset();
     VEC2 GetPosition() const;
+    TrackSection GetTrackSection() const;
+
 
 private:
     int m_txPlayer          { -1 };

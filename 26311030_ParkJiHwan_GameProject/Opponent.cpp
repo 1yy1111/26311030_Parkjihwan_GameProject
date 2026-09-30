@@ -38,13 +38,16 @@ int Opponent::Update(float deltaTime)
 		}
 	}
 
-	if (TrackSection::BottomStraight == m_trackSection)
+	switch (m_trackSection)
+	{
+	case TrackSection::BottomStraight:
 	{
 		m_position.x += m_speed * deltaTime;
 		m_position.y = Track::CURVE_POS_Y + m_currentRadius;
 		m_rotationAngle = 0.f;
-	}
-	else if (TrackSection::RightCurve == m_trackSection)
+	}break;
+
+	case TrackSection::RightCurve:
 	{
 		m_curveAngle -= (m_speed / m_currentRadius) * deltaTime;
 
@@ -55,14 +58,16 @@ int Opponent::Update(float deltaTime)
 			+ m_currentRadius * std::sin(m_curveAngle);
 
 		m_rotationAngle = m_curveAngle - Track::PI / 2.0f;
-	}
-	else if (TrackSection::TopStraight == m_trackSection)
+	}break;
+
+	case TrackSection::TopStraight:
 	{
 		m_position.x -= m_speed * deltaTime;
 		m_position.y = Track::CURVE_POS_Y - m_currentRadius;
 		m_rotationAngle = -Track::PI;
-	}
-	else if (TrackSection::LeftCurve == m_trackSection)
+	}break;
+
+	case TrackSection::LeftCurve:
 	{
 		m_curveAngle -= (m_speed / m_currentRadius) * deltaTime;
 
@@ -73,6 +78,10 @@ int Opponent::Update(float deltaTime)
 			+ m_currentRadius * std::sin(m_curveAngle);
 
 		m_rotationAngle = m_curveAngle - Track::PI / 2.0f;
+	}break;
+
+	default:
+		break;
 	}
 
 	bool isCurve =
@@ -132,21 +141,22 @@ void Opponent::Reset()
 
 void Opponent::CheckOpponentTrackSection()
 {
-	if (TrackSection::BottomStraight == m_trackSection)
+	switch (m_trackSection)
+	{
+	case TrackSection::BottomStraight:
 	{
 		if (m_position.x >= Track::RIGHT_CURVE_POS_X)
 		{
 			m_position.x = Track::RIGHT_CURVE_POS_X;
 			m_trackSection = TrackSection::RightCurve;
 			m_curveAngle = Track::PI / 2.f;
-
 			m_laneDecisionAngle =
 				m_curveAngle - m_decisionOffset(m_randomEngine);
-
 			m_laneDecisionDone = false;
 		}
-	}
-	else if (TrackSection::RightCurve == m_trackSection)
+	}break;
+
+	case TrackSection::RightCurve:
 	{
 		if (m_curveAngle <= -Track::PI / 2.f)
 		{
@@ -156,22 +166,22 @@ void Opponent::CheckOpponentTrackSection()
 			m_trackSection = TrackSection::TopStraight;
 			m_rotationAngle = -Track::PI;
 		}
-	}
-	else if (TrackSection::TopStraight == m_trackSection)
+	}break;
+
+	case TrackSection::TopStraight:
 	{
 		if (m_position.x <= Track::LEFT_CURVE_POS_X)
 		{
 			m_position.x = Track::LEFT_CURVE_POS_X;
 			m_trackSection = TrackSection::LeftCurve;
 			m_curveAngle = -Track::PI / 2.f;
-
 			m_laneDecisionAngle =
 				m_curveAngle - m_decisionOffset(m_randomEngine);
-
 			m_laneDecisionDone = false;
 		}
-	}
-	else if (TrackSection::LeftCurve == m_trackSection)
+	}break;
+
+	case TrackSection::LeftCurve:
 	{
 		if (m_curveAngle <= -3.f * Track::PI / 2.f)
 		{
@@ -181,5 +191,9 @@ void Opponent::CheckOpponentTrackSection()
 			m_trackSection = TrackSection::BottomStraight;
 			m_rotationAngle = 0.0f;
 		}
+	}break;
+
+	default:
+		break;
 	}
 }

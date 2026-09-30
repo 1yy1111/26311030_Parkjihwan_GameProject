@@ -12,6 +12,7 @@ class SceneGamePlay
 public:
 	int Init();
 	int Update();
+	int RenderWorld();
 	int Render();
 	int Destroy();
 
@@ -20,6 +21,7 @@ public:
 
 protected:
 	bool CheckCollision(VEC2 playerPos, VEC2 opponentPos);
+	bool CheckFinishLine(VEC2 previousPos, VEC2 currentPos);
 
 	// game texture
 	int m_txBg				{ -1 };

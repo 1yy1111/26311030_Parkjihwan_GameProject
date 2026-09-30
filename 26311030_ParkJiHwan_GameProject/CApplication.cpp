@@ -27,18 +27,24 @@ int CApplication::Init()
 
 int CApplication::Update()
 {
-    if (Scene::Begin == m_currentScene)
-    {
-        m_sceneBegin.Update();
-    }
-    else if (Scene::Play == m_currentScene)
-    {
-        m_scenePlay.Update();
-    }
-    else if (Scene::Result == m_currentScene)
-    {
-        m_sceneResult.Update();
-    }
+    switch (m_currentScene)
+	{
+	case Scene::Begin:
+		m_sceneBegin.Update();
+		break;
+
+	case Scene::Play:
+		m_scenePlay.Update();
+		break;
+
+	case Scene::Result:
+		m_sceneResult.Update();
+		break;
+
+	default:
+		break;
+	}
+        
 
     return 0;
 }
@@ -46,18 +52,25 @@ int CApplication::Update()
 int CApplication::Render()
 {
     // 공통 배경, 차
-    m_scenePlay.Render();
+    m_scenePlay.RenderWorld();
 
-    
-    if (Scene::Begin == m_currentScene)
-    {
-        m_sceneBegin.Render();
-    }
-    else if (Scene::Result == m_currentScene)
-    {
-        m_sceneResult.Render();
-    }
+    switch (m_currentScene)
+	{
+	case Scene::Begin:
+		m_sceneBegin.Render();
+		break;
 
+	case Scene::Play:
+		m_scenePlay.Render();
+		break;
+
+	case Scene::Result:
+		m_sceneResult.Render();
+		break;
+
+	default:
+		break;
+	}
     return 0;
 }
 

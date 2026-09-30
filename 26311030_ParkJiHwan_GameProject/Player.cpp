@@ -46,31 +46,36 @@ int Player::Update(float deltaTime)
 		? Track::OUTER_LANE_RADIUS
 		: Track::INNER_LANE_RADIUS;
 
-	if (m_trackSection == TrackSection::BottomStraight)
+	switch (m_trackSection)
+	{
+	case TrackSection::BottomStraight:
 	{
 		m_position.x -= m_speed * deltaTime;
 		m_position.y = Track::CURVE_POS_Y + m_currentRadius;
 		m_rotationAngle = 0.f;
-	}
-	else if (m_trackSection == TrackSection::LeftCurve)
+	}break;
+
+	case TrackSection::LeftCurve:
 	{
 		m_curveAngle -= (m_speed / m_currentRadius) * deltaTime;
 
 		m_position.x = Track::LEFT_CURVE_POS_X
 			+ m_currentRadius * -std::cos(m_curveAngle);
 
-		m_position.y = Track::CURVE_POS_Y 
+		m_position.y = Track::CURVE_POS_Y
 			+ m_currentRadius * std::sin(m_curveAngle);
 
 		m_rotationAngle = m_curveAngle - Track::PI / 2.0f;
-	}
-	else if (m_trackSection == TrackSection::TopStraight)
+	}break;
+
+	case TrackSection::TopStraight:
 	{
 		m_position.x += m_speed * deltaTime;
 		m_position.y = Track::CURVE_POS_Y - m_currentRadius;
 		m_rotationAngle = -Track::PI;
-	}
-	else if (m_trackSection == TrackSection::RightCurve)
+	}break;
+
+	case TrackSection::RightCurve:
 	{
 		m_curveAngle -= (m_speed / m_currentRadius) * deltaTime;
 
@@ -81,6 +86,10 @@ int Player::Update(float deltaTime)
 			+ m_currentRadius * std::sin(m_curveAngle);
 
 		m_rotationAngle = m_curveAngle - Track::PI / 2.0f;
+	}break;
+
+	default:
+		break;
 	}
 
 	CheckPlayerTrackSection();
@@ -107,9 +116,16 @@ VEC2 Player::GetPosition() const
 	return m_position;
 }
 
+TrackSection Player::GetTrackSection() const
+{
+	return m_trackSection;
+}
+
 void Player::CheckPlayerTrackSection()
 {
-	if (TrackSection::BottomStraight == m_trackSection)
+	switch (m_trackSection)
+	{
+	case TrackSection::BottomStraight:
 	{
 		if (m_position.x <= Track::LEFT_CURVE_POS_X)
 		{
@@ -117,8 +133,9 @@ void Player::CheckPlayerTrackSection()
 			m_trackSection = TrackSection::LeftCurve;
 			m_curveAngle = Track::PI / 2.f;
 		}
-	}
-	else if (TrackSection::LeftCurve == m_trackSection)
+	}break;
+
+	case TrackSection::LeftCurve:
 	{
 		if (m_curveAngle <= -Track::PI / 2.0f)
 		{
@@ -128,8 +145,9 @@ void Player::CheckPlayerTrackSection()
 			m_trackSection = TrackSection::TopStraight;
 			m_rotationAngle = -Track::PI;
 		}
-	}
-	else if (TrackSection::TopStraight == m_trackSection)
+	}break;
+
+	case TrackSection::TopStraight:
 	{
 		if (m_position.x >= Track::RIGHT_CURVE_POS_X)
 		{
@@ -137,8 +155,9 @@ void Player::CheckPlayerTrackSection()
 			m_trackSection = TrackSection::RightCurve;
 			m_curveAngle = -Track::PI / 2.0f;
 		}
-	}
-	else if (TrackSection::RightCurve == m_trackSection)
+	}break;
+
+	case TrackSection::RightCurve:
 	{
 		if (m_curveAngle <= -3.0f * Track::PI / 2.0f)
 		{
@@ -148,5 +167,9 @@ void Player::CheckPlayerTrackSection()
 			m_trackSection = TrackSection::BottomStraight;
 			m_rotationAngle = 0.0f;
 		}
+	}break;
+
+	default:
+		break;
 	}
 }
