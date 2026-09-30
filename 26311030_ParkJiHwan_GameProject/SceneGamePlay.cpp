@@ -82,6 +82,7 @@ int SceneGamePlay::Update()
 	if (isFinishLine)
 	{
 		++m_gameScore;
+		m_player.IncreaseSpeed(40.0f);
 	}
 
 	return 0;

@@ -121,6 +121,11 @@ TrackSection Player::GetTrackSection() const
 	return m_trackSection;
 }
 
+void Player::IncreaseSpeed(float amount)
+{
+	m_speed += amount;
+}
+
 void Player::CheckPlayerTrackSection()
 {
 	switch (m_trackSection)
