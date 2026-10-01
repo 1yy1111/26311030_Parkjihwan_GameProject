@@ -18,6 +18,7 @@ public:
 
 public:
 	void ResetGame();
+	int GetGameScore();
 
 protected:
 	bool CheckCollision(VEC2 playerPos, VEC2 opponentPos);

@@ -36,6 +36,11 @@ void SceneGamePlay::ResetGame()
 	g2_SoundPlay(m_startSound);
 }
 
+int SceneGamePlay::GetGameScore()
+{
+	return m_gameScore;
+}
+
 bool SceneGamePlay::CheckCollision(VEC2 playerPos, VEC2 opponentPos)
 {
 	constexpr float PLAYER_COLLISION_RADIUS{ 22.0f };
