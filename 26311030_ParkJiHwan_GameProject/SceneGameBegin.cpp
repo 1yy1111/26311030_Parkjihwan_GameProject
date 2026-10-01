@@ -9,13 +9,14 @@ int SceneGameBegin::Init()
 	this->m_txTitle = g2_TextureLoad("Resource/Texture/Title.png");
 
 	// font
-	this->m_fntMessage = g2_FontCreate("Neo둥근모", 32);
+	this->m_fntMessage = g2_FontCreate("Neo둥근모", 40);
 
 	return 0;
 }
 
 int SceneGameBegin::Destroy()
 {
+	g2_TextureRelease(m_txTitle);
 	return 0;
 }
 
@@ -38,7 +39,11 @@ int SceneGameBegin::Update()
 	if (pKey[VK_RETURN])
 	{
 		g_app.ChangeScene(Scene::Play);
-
+	}
+	else if (pKey[VK_ESCAPE])
+	{
+		g_app.RequestQuit();
+		return 0;
 	}
 
 	return 0;
@@ -47,17 +52,14 @@ int SceneGameBegin::Update()
 int SceneGameBegin::Render()
 {
 	// title
-	{
-		g2_Draw2D(m_txTitle, nullptr, &m_titlePos);
-	}
-
+	g2_Draw2D(m_txTitle, nullptr, &m_titlePos);
+	
 	// start guide
+	RECT rcStart{ 435, 410, 1000, 465 };
 	if (m_isTextVisible)
 	{
-		RECT rc{ 475, 430, 975, 490 };
-		g2_FontDrawText(m_fntMessage, rc, 0xFF17243A, "Enter 키를 눌러 시작");
+		g2_FontDrawText(m_fntMessage, rcStart, 0xFF444444, "%s", m_startText.c_str());
 	}
-
 	return 0;
 }
 

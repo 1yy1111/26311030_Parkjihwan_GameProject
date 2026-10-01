@@ -99,12 +99,26 @@ void CApplication::ChangeScene(Scene scene)
     }
 
     // Begin -> Play, Result -> Play일땐 새 게임 시작
-    if (Scene::Play == scene)
+    switch (scene)
     {
+    case Scene::Play:    
         m_scenePlay.ResetGame();
+        break;
+    
+    case Scene::Result:
+        m_sceneResult.SetScore(m_scenePlay.GetGameScore());
+        break;
+    
+    default:
+        break;
     }
 
     m_currentScene = scene;
+}
+
+void CApplication::RequestQuit()
+{
+	PostQuitMessage(0);
 }
 
 int CApplication::InitSdk()

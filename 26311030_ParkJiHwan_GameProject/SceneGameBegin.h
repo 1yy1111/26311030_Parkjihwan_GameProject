@@ -1,5 +1,6 @@
 #pragma once
 #include "glc2d.h"
+#include <string>
 
 class SceneGameBegin
 {
@@ -17,6 +18,7 @@ protected:
 	// game font
 	int	m_fntMessage	{ -1 };
 
+	std::string m_startText{ "Enter 키를 눌러 시작" };
 
 	// text blink
 	static constexpr long long BLINK_INTERVAL{ 500 };

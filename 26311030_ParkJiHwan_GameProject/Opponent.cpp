@@ -9,6 +9,7 @@ int Opponent::Init()
 
 int Opponent::Destroy()
 {
+	g2_TextureRelease(m_txOpponent);
 	return 0;
 }
 

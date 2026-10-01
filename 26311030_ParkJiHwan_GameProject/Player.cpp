@@ -10,6 +10,7 @@ int Player::Init()
 
 int Player::Destroy()
 {
+	g2_TextureRelease(m_txPlayer);
 	return 0;
 }
 

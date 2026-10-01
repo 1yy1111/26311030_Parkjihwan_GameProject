@@ -26,6 +26,7 @@ public:
 public:
 	SIZE GetWinSize();
 	void ChangeScene(Scene nextScene);
+	void RequestQuit();
 
 protected:
 	int InitSdk();

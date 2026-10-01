@@ -22,7 +22,8 @@ int SceneGamePlay::Destroy()
 {
 	m_player.Destroy();
 	m_opponent.Destroy();
-
+	g2_TextureRelease(m_txBg);
+	g2_SoundRelease(m_startSound);
 	return 0;
 }
 
