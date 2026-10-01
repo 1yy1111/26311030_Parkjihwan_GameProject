@@ -17,6 +17,7 @@ public:
     TrackSection GetTrackSection() const;
     void IncreaseSpeed(float amount);
     float GetRotationAngle() const;
+	bool DidChangeLane() const;
 
 private:
     int m_txPlayer          { -1 };
@@ -32,6 +33,7 @@ private:
     bool m_wasMouseDown     { false };
 
 	int m_laneChangeSound   { -1 };
+	bool m_didChangeLane    { false };
 
     TrackSection m_trackSection
     {

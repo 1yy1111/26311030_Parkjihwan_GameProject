@@ -28,10 +28,13 @@ void Player::Reset()
 	m_lane = TrackLane::Outer;
 	m_currentRadius = Track::OUTER_LANE_RADIUS;
 	m_wasMouseDown = (g2_GetMouseEvent(0) == 3);
+	m_didChangeLane = false;
 }
 
 int Player::Update(float deltaTime)
 {
+	m_didChangeLane = false;
+
 	bool isMouseDown = (g2_GetMouseEvent(0) == 3);
 
 	if (isMouseDown && !m_wasMouseDown)
@@ -45,6 +48,8 @@ int Player::Update(float deltaTime)
 			m_lane = TrackLane::Outer;
 		}
 		
+		m_didChangeLane = true;
+
 		g2_SoundReset(m_laneChangeSound);
 		g2_SoundPlay(m_laneChangeSound);
 	}
@@ -137,6 +142,11 @@ void Player::IncreaseSpeed(float amount)
 float Player::GetRotationAngle() const
 {
 	return m_rotationAngle;
+}
+
+bool Player::DidChangeLane() const
+{
+	return m_didChangeLane;
 }
 
 void Player::CheckPlayerTrackSection()

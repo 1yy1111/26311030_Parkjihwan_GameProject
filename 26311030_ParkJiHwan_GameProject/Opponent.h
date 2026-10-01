@@ -3,6 +3,7 @@
 #include "Track.h"	
 #include <cmath>
 #include <random>
+#include <iostream>
 
 class Opponent
 {
@@ -28,16 +29,16 @@ private:
 	float m_rotationAngle		{ 0.f };
 
 	float m_currentRadius		{ Track::OUTER_LANE_RADIUS };
-	float m_lineChangeSpeed		{ 160.f };
+	float m_lineChangeSpeed		{ 60.f };
 	std::mt19937 m_randomEngine	{ std::random_device{}() };
-	std::uniform_int_distribution<int> m_laneDistribution{ 1, 2 };
-	float m_laneDecisionAngle	{ 0.f };
-	bool m_laneDecisionDone		{ true };
+	std::uniform_int_distribution<int> m_laneDistribution{ 1, 2 };	// 1: Inner, 2: Outer
+	float m_laneDecisionAngle	{ 0.0f };							// 현재 곡선에서 목표 차선을 결정할 각도
+	bool m_laneDecisionDone{ true };								// 목표 차선 결정 여부
 
 	std::uniform_real_distribution<float> m_decisionOffset
 	{
-		Track::PI / 6.f,
-		5.f * Track::PI / 6.f
+		Track::PI / 6.0f, 
+		Track::PI / 2.0f
 	};
 
 	TrackSection m_trackSection

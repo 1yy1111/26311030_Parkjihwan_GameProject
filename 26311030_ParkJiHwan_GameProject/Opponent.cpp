@@ -95,6 +95,7 @@ int Opponent::Update(float deltaTime)
 	{
 		int result = m_laneDistribution(m_randomEngine);
 
+		std::cout << result << std::endl;
 		m_lane = (result == 1)
 			? TrackLane::Inner
 			: TrackLane::Outer;
