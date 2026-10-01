@@ -22,7 +22,7 @@ private:
 	void CheckOpponentTrackSection();
 
 	VEC2 m_position				{ 695.5f, Track::OUTER_BOTTOM_Y };
-	float m_speed				{ 600.f };
+	float m_speed				{ 1000.f };
 	float m_curveAngle			{ 0.f };
 	float m_rotationAngle		{ 0.f };
 

@@ -35,6 +35,7 @@ protected:
 
 	int m_gameScore			{ 0 };	
 
+	float m_speedStep		{ 40.0f };
 
 	GameTimer m_gameTimer;
 	Player m_player;

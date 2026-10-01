@@ -23,7 +23,7 @@ private:
     void CheckPlayerTrackSection();
 
     VEC2 m_position         { 585.5f, Track::OUTER_BOTTOM_Y };
-    float m_speed           { 600.0f };
+    float m_speed           { 1000.0f };
     float m_curveAngle      { 0.0f };
     float m_rotationAngle   { 0.0f };
 

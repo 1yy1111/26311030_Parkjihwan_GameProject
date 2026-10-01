@@ -33,7 +33,8 @@ void SceneGamePlay::ResetGame()
 	m_player.Reset();
 	m_opponent.Reset();
 	m_gameScore = 0;
-	
+	m_speedStep = 40.0f;
+
 	g2_SoundPlay(m_startSound);
 }
 
@@ -77,18 +78,24 @@ int SceneGamePlay::Update()
 	VEC2 opponentPos = m_opponent.GetPosition();
 
 	bool isCollision = CheckCollision(playerPos, opponentPos);
-	if(isCollision)
+	if (isCollision)
 	{
 		g_app.ChangeScene(Scene::Result);
-		
+
 		return 0;
 	}
 
+	// check finish line
 	bool isFinishLine = CheckFinishLine(previousPlayerPos, playerPos);
 	if (isFinishLine)
 	{
 		++m_gameScore;
-		m_player.IncreaseSpeed(40.0f);
+		m_player.IncreaseSpeed(m_speedStep);
+
+		if (0 == m_gameScore % 4)
+		{
+			m_speedStep *= 2 / 3.f;
+		}
 	}
 
 	return 0;
