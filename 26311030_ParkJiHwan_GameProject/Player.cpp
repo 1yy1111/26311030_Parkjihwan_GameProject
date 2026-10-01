@@ -2,8 +2,11 @@
 
 int Player::Init()
 {
-	// texture loading
-	m_txPlayer = g2_TextureLoad("Resource/Texture/sport_yellow.png");
+	// texture 
+	this->m_txPlayer = g2_TextureLoad("Resource/Texture/sport_yellow.png");
+
+	// sound
+	this->m_laneChangeSound = g2_SoundLoad("Resource/Sound/lane_change.mp3");
 
 	return 0;
 }
@@ -11,6 +14,7 @@ int Player::Init()
 int Player::Destroy()
 {
 	g2_TextureRelease(m_txPlayer);
+	g2_SoundRelease(m_laneChangeSound);
 	return 0;
 }
 
@@ -40,6 +44,9 @@ int Player::Update(float deltaTime)
 		{
 			m_lane = TrackLane::Outer;
 		}
+		
+		g2_SoundReset(m_laneChangeSound);
+		g2_SoundPlay(m_laneChangeSound);
 	}
 	m_wasMouseDown = isMouseDown;
 

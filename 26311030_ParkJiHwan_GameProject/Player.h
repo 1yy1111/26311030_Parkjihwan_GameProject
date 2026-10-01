@@ -30,6 +30,8 @@ private:
 	float m_currentRadius   { Track::OUTER_LANE_RADIUS };
     bool m_wasMouseDown     { false };
 
+	int m_laneChangeSound   { -1 };
+
     TrackSection m_trackSection
     {
         TrackSection::BottomStraight

@@ -32,6 +32,8 @@ protected:
 
 	// game sound 
 	int m_startSound		{ -1 };
+	int m_ScoreSound		{ -1 };	
+	int m_gameOverSound		{ -1 };
 
 	int m_gameScore			{ 0 };	
 

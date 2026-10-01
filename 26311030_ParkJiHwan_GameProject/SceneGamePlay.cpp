@@ -8,6 +8,8 @@ int SceneGamePlay::Init()
 
 	// sound
 	this->m_startSound = g2_SoundLoad("Resource/Sound/game_start.mp3");
+	this->m_ScoreSound = g2_SoundLoad("Resource/Sound/score.mp3");
+	this->m_gameOverSound = g2_SoundLoad("Resource/Sound/car_crash.mp3");
 
 	// font
 	this->m_fntMessage = g2_FontCreate("NeoµÕ±Ù¸ð", 150);
@@ -24,6 +26,8 @@ int SceneGamePlay::Destroy()
 	m_opponent.Destroy();
 	g2_TextureRelease(m_txBg);
 	g2_SoundRelease(m_startSound);
+	g2_SoundRelease(m_ScoreSound);
+	g2_SoundRelease(m_gameOverSound);
 	return 0;
 }
 
@@ -80,6 +84,7 @@ int SceneGamePlay::Update()
 	bool isCollision = CheckCollision(playerPos, opponentPos);
 	if (isCollision)
 	{
+		g2_SoundPlay(m_gameOverSound);
 		g_app.ChangeScene(Scene::Result);
 
 		return 0;
@@ -91,6 +96,7 @@ int SceneGamePlay::Update()
 	{
 		++m_gameScore;
 		m_player.IncreaseSpeed(m_speedStep);
+		g2_SoundPlay(m_ScoreSound);
 
 		if (0 == m_gameScore % 4)
 		{
