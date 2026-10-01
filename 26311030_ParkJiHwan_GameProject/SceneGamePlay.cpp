@@ -5,6 +5,7 @@ int SceneGamePlay::Init()
 {
 	// texture
 	this->m_txBg = g2_TextureLoad("Resource/Texture/background.png", 0);
+	this->m_txCrashEffect = g2_TextureLoad("Resource/Texture/crash_effect.png", 0);
 
 	// sound
 	this->m_startSound = g2_SoundLoad("Resource/Sound/game_start.mp3");
@@ -25,6 +26,7 @@ int SceneGamePlay::Destroy()
 	m_player.Destroy();
 	m_opponent.Destroy();
 	g2_TextureRelease(m_txBg);
+	g2_TextureRelease(m_txCrashEffect);
 	g2_SoundRelease(m_startSound);
 	g2_SoundRelease(m_ScoreSound);
 	g2_SoundRelease(m_gameOverSound);
@@ -38,6 +40,7 @@ void SceneGamePlay::ResetGame()
 	m_opponent.Reset();
 	m_gameScore = 0;
 	m_speedStep = 40.0f;
+	m_showCrashEffect = false;
 
 	g2_SoundPlay(m_startSound);
 }
@@ -47,18 +50,68 @@ int SceneGamePlay::GetGameScore()
 	return m_gameScore;
 }
 
-bool SceneGamePlay::CheckCollision(VEC2 playerPos, VEC2 opponentPos)
+bool SceneGamePlay::CheckCollision(VEC2 playerPos, VEC2 opponentPos, float playerAngle, float opponentAngle)
 {
-	constexpr float PLAYER_COLLISION_RADIUS{ 22.0f };
-	constexpr float OPPONENT_COLLISION_RADIUS{ 22.0f };
+	constexpr float CAR_COLLISION_RADIUS{ 15.5f };
+	constexpr float OFFSET{ 20.0f };
 
-	float dx = playerPos.x - opponentPos.x;
-	float dy = playerPos.y - opponentPos.y;
-	float collisionDistance =
-		PLAYER_COLLISION_RADIUS + OPPONENT_COLLISION_RADIUS;
+	float playerFwdX = -std::cos(playerAngle);
+	float playerFwdY = std::sin(playerAngle);
+	float opponentFwdX = std::cos(opponentAngle);
+	float opponentFwdY = std::sin(opponentAngle);
 
-	return dx * dx + dy * dy
-		<= collisionDistance * collisionDistance;
+	VEC2 playerFront
+	{
+		playerPos.x + playerFwdX * OFFSET,
+		playerPos.y + playerFwdY * OFFSET
+	};
+
+	VEC2 playerBack
+	{
+		playerPos.x - playerFwdX * OFFSET,
+		playerPos.y - playerFwdY * OFFSET
+	};
+
+	VEC2 opponentFront
+	{
+		opponentPos.x + opponentFwdX * OFFSET,
+		opponentPos.y + opponentFwdY * OFFSET
+	};
+
+	VEC2 opponentBack
+	{
+		opponentPos.x - opponentFwdX * OFFSET,
+		opponentPos.y - opponentFwdY * OFFSET
+	};
+
+	VEC2 playerCenters[3]
+	{
+		playerFront, playerPos, playerBack
+	};
+
+	VEC2 opponentCenters[3]
+	{
+		opponentFront, opponentPos, opponentBack
+	};
+
+	float collisionDistance = CAR_COLLISION_RADIUS * 2.f;
+
+	for (int i = 0; i < 3; ++i)
+	{
+		for (int j = 0; j < 3; ++j)
+		{
+			float dx = playerCenters[i].x - opponentCenters[j].x;
+			float dy = playerCenters[i].y - opponentCenters[j].y;
+
+			if (dx * dx + dy * dy
+				<= collisionDistance * collisionDistance)
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 bool SceneGamePlay::CheckFinishLine(VEC2 previousPos, VEC2 currentPos)
@@ -80,10 +133,19 @@ int SceneGamePlay::Update()
 
 	VEC2 playerPos = m_player.GetPosition();
 	VEC2 opponentPos = m_opponent.GetPosition();
+	float playerAngle = m_player.GetRotationAngle();
+	float opponentAngle = m_opponent.GetRotationAngle();
 
-	bool isCollision = CheckCollision(playerPos, opponentPos);
+	bool isCollision = CheckCollision(playerPos, opponentPos, playerAngle, opponentAngle);
 	if (isCollision)
 	{
+		m_crashEffectPos = VEC2(
+			(playerPos.x + opponentPos.x) * 0.5f,
+			(playerPos.y + opponentPos.y) * 0.5f
+		);
+
+		m_showCrashEffect = true;
+
 		g2_SoundPlay(m_gameOverSound);
 		g_app.ChangeScene(Scene::Result);
 
@@ -120,6 +182,18 @@ int SceneGamePlay::RenderWorld()
 
 	m_player.Render();
 	m_opponent.Render();
+
+	// crash effect
+	if (m_showCrashEffect)
+	{
+		VEC2 effectDrawPos
+		{
+			m_crashEffectPos.x - g2_TextureWidth(m_txCrashEffect) * 0.5f,
+			m_crashEffectPos.y - g2_TextureHeight(m_txCrashEffect) * 0.5f
+		};
+		g2_Draw2D(m_txCrashEffect, nullptr, &effectDrawPos);
+	}
+	
 	return 0;
 }
 

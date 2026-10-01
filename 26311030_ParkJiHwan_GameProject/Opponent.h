@@ -15,6 +15,7 @@ public:
 public:
 	void Reset();
 	VEC2 GetPosition() const;
+	float GetRotationAngle() const;
 
 private:
 	int m_txOpponent			{ -1 };

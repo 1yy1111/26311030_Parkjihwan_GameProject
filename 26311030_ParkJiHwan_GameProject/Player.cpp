@@ -134,6 +134,11 @@ void Player::IncreaseSpeed(float amount)
 	m_speed += amount;
 }
 
+float Player::GetRotationAngle() const
+{
+	return m_rotationAngle;
+}
+
 void Player::CheckPlayerTrackSection()
 {
 	switch (m_trackSection)

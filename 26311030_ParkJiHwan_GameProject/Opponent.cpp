@@ -127,6 +127,11 @@ VEC2 Opponent::GetPosition() const
 	return m_position;
 }
 
+float Opponent::GetRotationAngle() const
+{
+	return m_rotationAngle;
+}
+
 void Opponent::Reset()
 {
 	m_position = VEC2(695.5f, Track::OUTER_BOTTOM_Y);

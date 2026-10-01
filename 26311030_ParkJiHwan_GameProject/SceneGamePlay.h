@@ -5,7 +5,7 @@
 #include "Track.h"
 #include "Player.h"
 #include "Opponent.h"
-
+#include <cmath>
 
 class SceneGamePlay
 {
@@ -21,11 +21,14 @@ public:
 	int GetGameScore();
 
 protected:
-	bool CheckCollision(VEC2 playerPos, VEC2 opponentPos);
+	bool CheckCollision(VEC2 playerPos, VEC2 opponentPos, float playerAngle, float opponentAngle);
 	bool CheckFinishLine(VEC2 previousPos, VEC2 currentPos);
 
 	// game texture
 	int m_txBg				{ -1 };
+	int m_txCrashEffect		{ -1 };
+	bool m_showCrashEffect{ false };
+	VEC2 m_crashEffectPos{ 0.f, 0.f };
 
 	// game font
 	int	m_fntMessage		{ -1 };
@@ -38,6 +41,7 @@ protected:
 	int m_gameScore			{ 0 };	
 
 	float m_speedStep		{ 40.0f };
+
 
 	GameTimer m_gameTimer;
 	Player m_player;

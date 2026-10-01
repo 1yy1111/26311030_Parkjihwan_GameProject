@@ -16,6 +16,7 @@ public:
     VEC2 GetPosition() const;
     TrackSection GetTrackSection() const;
     void IncreaseSpeed(float amount);
+    float GetRotationAngle() const;
 
 private:
     int m_txPlayer          { -1 };
