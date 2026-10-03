@@ -133,6 +133,12 @@ float Opponent::GetRotationAngle() const
 	return m_rotationAngle;
 }
 
+void Opponent::IncreaseSpeed(float amount)
+{
+	m_speed += amount;
+	std::cout << "opponent speed: " << m_speed << std::endl;
+}
+
 void Opponent::Reset()
 {
 	m_position = VEC2(695.5f, Track::OUTER_BOTTOM_Y);

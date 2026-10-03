@@ -2,6 +2,7 @@
 #include "glc2d.h"
 #include "Track.h"
 #include <cmath>
+#include <iostream>
 
 class Player
 {
@@ -25,7 +26,7 @@ private:
     void CheckPlayerTrackSection();
 
     VEC2 m_position         { 585.5f, Track::OUTER_BOTTOM_Y };
-    float m_speed           { 1000.0f };
+    float m_speed           { 500.0f };
     float m_curveAngle      { 0.0f };
     float m_rotationAngle   { 0.0f };
 

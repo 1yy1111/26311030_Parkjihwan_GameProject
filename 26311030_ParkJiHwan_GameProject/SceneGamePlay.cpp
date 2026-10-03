@@ -201,6 +201,7 @@ int SceneGamePlay::Update()
 		++m_lapCount;
 		++m_gameScore;
 		m_player.IncreaseSpeed(m_speedStep);
+		m_opponent.IncreaseSpeed(m_speedStep);
 		g2_SoundPlay(m_ScoreSound);
 
 		if (0 == m_lapCount % 4)

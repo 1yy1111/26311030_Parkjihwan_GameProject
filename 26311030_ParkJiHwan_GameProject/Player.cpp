@@ -137,6 +137,7 @@ TrackSection Player::GetTrackSection() const
 void Player::IncreaseSpeed(float amount)
 {
 	m_speed += amount;
+	std::cout << "player speed: " << m_speed << std::endl;
 }
 
 float Player::GetRotationAngle() const
